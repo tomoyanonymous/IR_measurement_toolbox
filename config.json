@@ -1,0 +1,7 @@
+{
+	"format" : "float32",
+	"start_freq" : 1,
+	"end_freq" : 20000,
+	"duration" : 2,
+	"repeats" : 5
+}
