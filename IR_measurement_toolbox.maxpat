@@ -143,7 +143,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 1196.0, 938.0, 72.0, 22.0 ],
-					"presentation_rect" : [ 1196.0, 938.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "loadmess 1"
 				}
@@ -923,7 +922,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 34.0, 79.0, 1088.0, 683.0 ],
+						"rect" : [ 34.0, 79.0, 680.0, 683.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -7027,13 +7026,13 @@
 ,
 		"dependency_cache" : [ 			{
 				"name" : "gen_logSS.gendsp",
-				"bootpath" : "~/Max 7/Projects/AutoEQ",
+				"bootpath" : "~/Max 7/Projects/IR_measurement_toolbox",
 				"type" : "gDSP",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "gen_logSS_Inv.gendsp",
-				"bootpath" : "~/Max 7/Projects/AutoEQ",
+				"bootpath" : "~/Max 7/Projects/IR_measurement_toolbox",
 				"type" : "gDSP",
 				"implicit" : 1
 			}
