@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "dsp.gen",
-		"rect" : [ 167.0, 79.0, 716.0, 631.0 ],
+		"rect" : [ 530.0, 79.0, 716.0, 631.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -50,7 +50,7 @@
 			}
 , 			{
 				"box" : 				{
-					"code" : "\r\n\r\nBuffer upsweep(\"ESS\");\r\nBuffer dnsweep(\"Inv\");\r\nParam sr(48000);\r\n// in1 = startfreq in2 =endfreq in3 duration in4 sr\r\nsf = in1;\r\nef = in2;\r\ndu = in3;\r\ndusample = du*sr;\r\n\r\nlf =  ln(ef/sf);\r\nalpha = (twopi * sf * du) / lf;\r\ncnt=0;\r\nfor(i = 0;i<du;i+=(1/sr)){\r\n\r\n\tj = (du-i-1);\r\n\ttu=i;\r\n\tju=j;\r\n\tk = exp(tu*ln(ef/sf)/du);\r\n\tk2 = exp(ju*lf/du);\r\n\tp = (alpha*(exp(tu*ln(ef/sf)/du)-1)) % twopi;\r\n\t//sin((2*np.pi*f1*T/R)*(np.exp(t*R/T)-1));\r\n\tsample = sin((twopi*sf*du/lf)*(exp(tu*ln(ef/sf)/du)-1));\r\n\tpoke(upsweep,sample,cnt);\r\n\tpoke(dnsweep,sample/k2,dusample-cnt-1);\r\n\tcnt+=1;\r\n}\r\n\r\nout1 = sr;",
+					"code" : "\r\n\r\nBuffer upsweep(\"ESS\");\r\nBuffer dnsweep(\"Inv\");\r\nParam sr(48000);\r\nParam type(0); //0=exponential 1=linear\r\n// in1 = startfreq in2 =endfreq in3 duration in4 sr\r\nsf = in1;\r\nef = in2;\r\ndu = in3;\r\ndusample = du*sr;\r\nklinear = (ef-sf)/du;\r\nlf =  ln(ef/sf);\r\nalpha = (twopi * sf * du) / lf;\r\ncnt=0; \r\n\r\nif(type){\r\nfor(i = 0;i<du;i+=(1/sr)){\r\n\r\n\tj = (du-i-1/sr);\r\n\ttu=i;\r\n\tju=j;\r\n\tenvdb = (i/du)*(-6*log2(lf/sf));\r\n\tenv = pow(10,envdb/10);\r\n\tk = exp(tu*lf/du);\r\n\tk2 = exp(ju*lf/du);\r\n\tp = alpha*(exp(tu*lf/du-1));\r\n\trp = alpha*(exp(ju*lf/du-1));\r\n\t//sin((2*np.pi*f1*T/R)*(np.exp(t*R/T)-1));\r\n\tsample = sin(p);\r\n\trvsample=sin(rp)*env*2*2;\r\n\tpoke(upsweep,sample,cnt);\r\n\tpoke(dnsweep,rvsample,cnt);\r\n\tcnt+=1;\r\n}\r\n}else{\r\n\tfor(i = 0;i<du;i+=(1/sr)){\r\n\tsample= sin(twopi*(sf*i+klinear*i*i/2));\r\n\tpoke(upsweep,sample,cnt);\r\n\tpoke(dnsweep,sample,dusample-cnt-1);\r\n\r\n\tcnt+=1;\r\n}\r\n}\r\n\r\nout1 = sr;",
 					"fontface" : 0,
 					"fontname" : "Menlo",
 					"fontsize" : 12.0,
