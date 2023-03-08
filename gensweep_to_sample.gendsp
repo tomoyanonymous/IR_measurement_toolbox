@@ -1,0 +1,140 @@
+{
+	"patcher" : 	{
+		"fileversion" : 1,
+		"appversion" : 		{
+			"major" : 8,
+			"minor" : 5,
+			"revision" : 0,
+			"architecture" : "x64",
+			"modernui" : 1
+		}
+,
+		"classnamespace" : "dsp.gen",
+		"rect" : [ 914.0, 231.0, 554.0, 660.0 ],
+		"bglocked" : 0,
+		"openinpresentation" : 0,
+		"default_fontsize" : 12.0,
+		"default_fontface" : 0,
+		"default_fontname" : "Arial",
+		"gridonopen" : 1,
+		"gridsize" : [ 15.0, 15.0 ],
+		"gridsnaponopen" : 1,
+		"objectsnaponopen" : 1,
+		"statusbarvisible" : 2,
+		"toolbarvisible" : 1,
+		"lefttoolbarpinned" : 0,
+		"toptoolbarpinned" : 0,
+		"righttoolbarpinned" : 0,
+		"bottomtoolbarpinned" : 0,
+		"toolbars_unpinned_last_save" : 0,
+		"tallnewobj" : 0,
+		"boxanimatetime" : 200,
+		"enablehscroll" : 1,
+		"enablevscroll" : 1,
+		"devicewidth" : 0.0,
+		"description" : "",
+		"digest" : "",
+		"tags" : "",
+		"style" : "",
+		"subpatcher_template" : "",
+		"assistshowspatchername" : 0,
+		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-8",
+					"linecount" : 4,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 264.399997234344482, 5.0, 150.0, 60.0 ],
+					"text" : "a number of process sample.\nmust be < 99999 due to the spec of genexpr."
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-9",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 420.0, 16.0, 28.0, 22.0 ],
+					"text" : "in 2"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-7",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 60.0, 15.0, 150.0, 33.0 ],
+					"text" : "start sample index for buffer"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"code" : "Buffer upsweep(\"ESS\");\r\nBuffer dnsweep(\"Inv\");\r\nParam sr(48000);\r\nParam type(0); //1=exponential 0=linear\r\nParam duration(1.0);\r\nParam start_freq(1.0);\r\nParam end_freq(20000);\r\nlf =  ln(end_freq/start_freq);\r\ndusample = duration*sr;\r\n\r\nalpha = (twopi * start_freq * duration) / lf;\r\n\r\ncnt_init = in1;\r\nup_to = in2+cnt_init;\r\n\r\nfor(cnt = cnt_init;cnt<up_to;cnt+=1){\r\ni = cnt/sr;\r\nif(type){\r\n\tj = (duration-i-1/sr);\r\n\r\n\tk = exp(i*lf/duration);\r\n\tphase_up = alpha*(exp(i*lf/duration)-1);\r\n\r\n\t//sin((2*np.pi*f1*T/R)*(np.exp(t*R/T)-1));\r\n\tsample = sin(phase_up);\r\n\tenvdb = (i/duration)*(-6*log2(lf/start_freq));\r\n\tenv = pow(10,envdb/10);\r\n\tr_phase = alpha*(exp(j*lf/duration)-1);\r\n\trvsample=sin(r_phase)*env*2*2;\r\n\tpoke(upsweep,sample,cnt);\r\n\tpoke(dnsweep,rvsample,cnt);\r\n}else{\r\n\tklinear = (end_freq-start_freq)/duration;\r\n\tsample= sin(twopi*(start_freq*i+klinear*i*i/2));\r\n\tpoke(upsweep,sample,cnt);\r\n\tpoke(dnsweep,sample,dusample-cnt-1);\t\r\n}\r\n}\r\n\t\t\r\nout1 =sr;",
+					"fontface" : 0,
+					"fontname" : "<Monospaced>",
+					"fontsize" : 12.0,
+					"id" : "obj-5",
+					"maxclass" : "codebox",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 21.0, 67.0, 418.0, 268.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-1",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 21.0, 14.0, 28.0, 22.0 ],
+					"text" : "in 1"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-4",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 21.0, 404.0, 35.0, 22.0 ],
+					"text" : "out 1"
+				}
+
+			}
+ ],
+		"lines" : [ 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"source" : [ "obj-1", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-4", 0 ],
+					"source" : [ "obj-5", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 1 ],
+					"source" : [ "obj-9", 0 ]
+				}
+
+			}
+ ]
+	}
+
+}
