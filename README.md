@@ -34,7 +34,7 @@ Thanks to gen, now it can generate the test signal in a moment.
 
 ## Making (in Japanese)
 
-<http://matsuuratomoya.com/blog/2016-06-11/log-sinsesweep-jitter-gen1/>
+<http://matsuuratomoya.com/blog/2016-06-11/log-sinsesweep-jitter-gen/>
 
 ## [License](LICENSE)
 
